@@ -19,6 +19,7 @@ WORKDIR /usr/src/app
 COPY --from=builder --chown=node:node /usr/src/app/ /usr/src/app/ 
 ## 動作に必要なパッケージのインストール
 RUN npm install -g pnpm && pnpm install --frozen-lockfile --prod
+RUN npx prisma generate
 EXPOSE 3000
 
 ## nodeユーザーとして実行
