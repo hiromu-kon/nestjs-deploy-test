@@ -62,19 +62,19 @@ jobs:
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
 
-      # - name: ECS run migrate task
-      #   id: run-task
-      #   env:
-      #     task_definition: ${{ secrets.ECS_TASK_DEFINITION }}
-      #     cluster: ${{ env.ECS_CLUSTER }}
-      #     vpc_configuration: '{subnets=${{ secrets.SUBNET_IDS }},securityGroups=${{ secrets.SECURITY_GROUP_IDS }},assignPublicIp=DISABLED}'
-      #     container_overrides: '{"containerOverrides": [{"name": "${{ env.ECS_CONTAINER_NAME }}", "command": ["echo", "Container is running!"], "cpu": 512, "memory": 1024 }]}'
-      #   run: |
-      #     task_arn=$(aws ecs run-task \
-      #       --region ap-northeast-1 \
-      #       --launch-type FARGATE \
-      #       --cluster '${{ env.cluster }}' \
-      #       --network-configuration 'awsvpcConfiguration=${{ env.vpc_configuration }}' \
-      #       --task-definition '${{ env.task_definition }}' \
-      #       --overrides '${{ env.container_overrides }}' \
-      #       --query tasks[0].taskArn --output text)
+      - name: ECS run migrate task
+        id: run-task
+        env:
+          task_definition: ${{ secrets.ECS_TASK_DEFINITION }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          vpc_configuration: '{subnets=${{ secrets.SUBNET_IDS }},securityGroups=${{ secrets.SECURITY_GROUP_IDS }},assignPublicIp=DISABLED}'
+          container_overrides: '{"containerOverrides": [{"name": "${{ env.ECS_CONTAINER_NAME }}", "command": ["npx", "prisma", "migrate", "deploy"], "cpu": 512, "memory": 1024 }]}'
+        run: |
+          task_arn=$(aws ecs run-task \
+            --region ap-northeast-1 \
+            --launch-type FARGATE \
+            --cluster '${{ env.cluster }}' \
+            --network-configuration 'awsvpcConfiguration=${{ env.vpc_configuration }}' \
+            --task-definition '${{ env.task_definition }}' \
+            --overrides '${{ env.container_overrides }}' \
+            --query tasks[0].taskArn --output text)
