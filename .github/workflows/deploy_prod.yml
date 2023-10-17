@@ -82,11 +82,15 @@ jobs:
       #     aws ecs wait tasks-stopped --cluster '${{ env.cluster }}' --tasks $task_arn
       #     echo "Task has completed."
 
+      - name: Remove unnecessary properties from task definition
+        run: |
+          jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)' task-definition.json > modified-task-definition.json
+
       - name: Run ECS task
         id: run-task
         uses: yyoshiki41/ecs-run-task-action@v0.0.8
         with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          task-definition: modified-task-definition.json
           task-definition-family: ${{ secrets.ECS_TASK_DEFINITION_FAMILY }}
           cluster: ${{ env.ECS_CLUSTER }}
           subnets: '${{ secrets.SUBNET_IDS }}'
