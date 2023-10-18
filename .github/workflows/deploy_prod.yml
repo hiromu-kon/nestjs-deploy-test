@@ -64,7 +64,7 @@ jobs:
 
       - name: Save task definition
         run: |
-          echo "${{ steps.task-def.outputs.task-definition }}" > new-task-definition.json
+          echo '${{ steps.task-def.outputs.task-definition }}'' > new-task-definition.json
 
       - name: Remove unnecessary properties from task definition
         run: |
