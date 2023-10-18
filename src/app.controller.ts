@@ -19,6 +19,11 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  @Get('fizz')
+  getFizzBuzz(): string {
+    return 'buzz';
+  }
+
   @Get('todos')
   index() {
     return this.appService.fetchTodos();
