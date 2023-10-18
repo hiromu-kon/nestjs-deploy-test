@@ -10,6 +10,10 @@ export class AppService {
     return 'Hello World!';
   }
 
+  getFizzBuzz(): string {
+    return 'buzz!';
+  }
+
   async fetchTodos() {
     return this.prisma.todo.findMany();
   }
