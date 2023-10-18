@@ -67,7 +67,7 @@ jobs:
       #   env:
       #     task_definition: ${{ secrets.ECS_TASK_DEFINITION_FAMILY }}
       #     cluster: ${{ env.ECS_CLUSTER }}
-      #     vpc_configuration: '{subnets=${{ secrets.SUBNET_IDS }},securityGroups=${{ secrets.SECURITY_GROUP_IDS }},assignPublicIp=DISABLED}'
+      #     vpc_configuration: '{subnets=${{ secrets.SUBNET_IDS }},securityGroups=${{ secrets.SECURITY_GROUP_IDS }},assignPublicIp=ENABLED}'
       #     container_overrides: '{"containerOverrides": [{"name": "${{ env.ECS_CONTAINER_NAME }}", "command": ["npx", "prisma", "migrate", "deploy"], "cpu": 512, "memory": 1024 }]}'
       #   run: |
       #     task_arn=$(aws ecs run-task \
