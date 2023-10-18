@@ -21,7 +21,7 @@ export class AppController {
 
   @Get('fizz')
   getFizzBuzz(): string {
-    return 'buzz';
+    return this.appService.getFizzBuzz();
   }
 
   @Get('todos')
