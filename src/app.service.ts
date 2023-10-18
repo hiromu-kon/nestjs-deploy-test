@@ -6,9 +6,9 @@ import { Prisma, Todo } from '@prisma/client';
 export class AppService {
   constructor(private prisma: PrismaService) {}
 
-  getHello(): string {
-    return 'Hello World!';
-  }
+  // getHello(): string {
+  //   return 'Hello World!';
+  // }
 
   async fetchTodos() {
     return this.prisma.todo.findMany();
