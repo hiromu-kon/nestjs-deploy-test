@@ -96,4 +96,5 @@ jobs:
           subnets: '${{ secrets.SUBNET_IDS }}'
           security-groups: '${{ secrets.SECURITY_GROUP_IDS }}'
           container-name: ${{ env.ECS_CONTAINER_NAME }}
+          assign-public-ip: 'ENABLED'
           command: '["npx", "prisma", "migrate", "deploy"]'
