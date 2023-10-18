@@ -64,7 +64,7 @@ jobs:
 
       - name: Remove unnecessary properties from task definition
         run: |
-          echo "${{ steps.task-def.outputs.task-definition }}" | jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)' new-task-definition.json > migrate-task-definition.json
+          echo "${{ steps.task-def.outputs.task-definition }}" | jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)' > migrate-task-definition.json
 
       - name: Run ECS task
         id: run-task
