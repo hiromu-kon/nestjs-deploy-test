@@ -62,9 +62,13 @@ jobs:
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
 
+      - name: Save task definition
+        run: |
+          echo "${{ steps.task-def.outputs.task-definition }}" > new-task-definition.json
+
       - name: Remove unnecessary properties from task definition
         run: |
-          echo "${{ steps.task-def.outputs.task-definition }}" | jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)' > migrate-task-definition.json
+          jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)' new-task-definition.json > migrate-task-definition.json
 
       - name: Run ECS task
         id: run-task
