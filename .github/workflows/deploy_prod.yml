@@ -62,35 +62,15 @@ jobs:
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
 
-      # - name: ECS run migrate task
-      #   id: run-task
-      #   env:
-      #     task_definition: ${{ secrets.ECS_TASK_DEFINITION_FAMILY }}
-      #     cluster: ${{ env.ECS_CLUSTER }}
-      #     vpc_configuration: '{subnets=${{ secrets.SUBNET_IDS }},securityGroups=${{ secrets.SECURITY_GROUP_IDS }},assignPublicIp=ENABLED}'
-      #     container_overrides: '{"containerOverrides": [{"name": "${{ env.ECS_CONTAINER_NAME }}", "command": ["npx", "prisma", "migrate", "deploy"], "cpu": 512, "memory": 1024 }]}'
-      #   run: |
-      #     task_arn=$(aws ecs run-task \
-      #       --region ap-northeast-1 \
-      #       --launch-type FARGATE \
-      #       --cluster '${{ env.cluster }}' \
-      #       --network-configuration 'awsvpcConfiguration=${{ env.vpc_configuration }}' \
-      #       --task-definition '${{ env.task_definition }}' \
-      #       --overrides '${{ env.container_overrides }}' \
-      #       --query tasks[0].taskArn --output text)
-
-      #     aws ecs wait tasks-stopped --cluster '${{ env.cluster }}' --tasks $task_arn
-      #     echo "Task has completed."
-
       - name: Remove unnecessary properties from task definition
         run: |
-          jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)' task-definition.json > modified-task-definition.json
+          echo "${{ steps.task-def.outputs.task-definition }}" | jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)' new-task-definition.json > migrate-task-definition.json
 
       - name: Run ECS task
         id: run-task
         uses: yyoshiki41/ecs-run-task-action@v0.0.8
         with:
-          task-definition: modified-task-definition.json
+          task-definition: migrate-task-definition.json
           task-definition-family: migration
           cluster: ${{ env.ECS_CLUSTER }}
           subnets: '${{ secrets.SUBNET_IDS }}'
